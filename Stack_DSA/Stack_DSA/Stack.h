@@ -1,5 +1,6 @@
 #ifndef STACK_H
 #define STACK_H
+#include <stdexcept>
 
 template <typename T>
 class Stack
@@ -82,6 +83,7 @@ inline Stack<T>& Stack<T>::operator=(const Stack<T>& rhs)
 {
 	if (this != &rhs)
 	{
+		clear();
 		copyFrom(rhs);
 	}
 	return *this;
@@ -113,19 +115,19 @@ inline void Stack<T>::push(const T & member)
 template<typename T>
 inline void Stack<T>::pop()
 {
-	if (!isEmpty())
+	if (isEmpty())
 	{
-		top--;
+		throw std::logic_error("the stack is empty");
 	}
+	top--;
 }
 
 template<typename T>
 inline const T & Stack<T>::peek() const
 {
 	if (isEmpty())
-	{
-		std::cout << "The stack is empty!!!" << std::endl;
-		return 0;                                                  //must be changed
+	{                                                 
+		throw std::logic_error("the stack is empty");
 	}
 	return data[top - 1];
 }

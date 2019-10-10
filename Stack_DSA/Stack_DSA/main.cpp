@@ -4,6 +4,7 @@
 int main()
 {
 	Stack<int> stack(6);
+	stack.peek();
 	stack.push(1);
 	stack.push(5);
 	std::cout << stack.peek() << std::endl;
