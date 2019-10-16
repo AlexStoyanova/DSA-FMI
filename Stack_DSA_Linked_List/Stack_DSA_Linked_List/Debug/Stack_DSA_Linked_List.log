@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\users\alexandra\source\repos\stack_dsa_linked_list\stack_dsa_linked_list\stackwithlinkedlist.h(123): warning C4172: returning address of local variable or temporary
+  Stack_DSA_Linked_List.vcxproj -> C:\Users\Alexandra\source\repos\Stack_DSA_Linked_List\Debug\Stack_DSA_Linked_List.exe
