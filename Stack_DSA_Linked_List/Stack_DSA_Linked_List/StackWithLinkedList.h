@@ -22,7 +22,7 @@ private:
 public:
 	StackWithLinkedList();
 	StackWithLinkedList(const StackWithLinkedList<T>& other);
-	StackWithLinkedList<T> operator=(const StackWithLinkedList<T>& rhs);
+	StackWithLinkedList<T>& operator=(const StackWithLinkedList<T>& rhs);
 	~StackWithLinkedList();
 
 	void push(const T& data);
@@ -78,7 +78,7 @@ inline StackWithLinkedList<T>::StackWithLinkedList(const StackWithLinkedList<T>&
 }
 
 template<typename T>
-inline StackWithLinkedList<T> StackWithLinkedList<T>::operator=(const StackWithLinkedList<T>& rhs)
+inline StackWithLinkedList<T>& StackWithLinkedList<T>::operator=(const StackWithLinkedList<T>& rhs)
 {
 	if (this != &rhs)
 	{
