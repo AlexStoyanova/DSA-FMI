@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\users\alexandra\source\repos\balancedbrackets\balancedbrackets\main.cpp(36): warning C4018: '<': signed/unsigned mismatch
+  BalancedBrackets.vcxproj -> C:\Users\Alexandra\source\repos\BalancedBrackets\Debug\BalancedBrackets.exe
