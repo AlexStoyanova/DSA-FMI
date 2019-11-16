@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 template <typename T>
 class LinkedList
@@ -130,7 +131,7 @@ inline void LinkedList<T>::copyFrom(const LinkedList<T>& other)
 template<typename T>
 inline void LinkedList<T>::clear()
 {
-	if (front == back == nullptr)
+	if (front == nullptr)
 	{
 		return;
 	}
@@ -222,80 +223,212 @@ inline bool LinkedList<T>::empty() const
 template<typename T>
 inline bool LinkedList<T>::insertBefore(const T & newEl, const Iterator & it)
 {
-
-	
+	if (it == begin())
+	{
+		Node* toAdd = new Node(newEl, front);
+		front = toAdd;
+		if (back == nullptr)
+		{
+			back = toAdd;
+		}
+		return true;
+	}
+	return insertAfter(newEl, prev(it));
 }
 
 template<typename T>
 inline bool LinkedList<T>::insertAfter(const T & newEl, const Iterator & it)
 {
-	return false;
+	if (!it || it.ptr == back)
+	{
+		Node* toAdd = new Node(newEl);
+		if (front == nullptr)
+		{
+			front = toAdd;
+			back = toAdd;
+			return true;
+		}
+		back->nextPtr = toAdd;
+		back = toAdd;
+		return true;
+	}
+	Node* toAdd = new Node(newEl, it.ptr->nextPtr);
+	it.ptr->nextPtr = toAdd;
+	return true;
 }
 
 template<typename T>
 inline void LinkedList<T>::insertBegin(const T & newEl)
 {
+	Node* newElem = new Node(newEl, front);
+	if (back == nullptr)
+	{
+		back = newElem;
+	}
+	front = newElem;
 }
 
 template<typename T>
 inline void LinkedList<T>::insertEnd(const T & newEl)
 {
+	Node* newElem = new Node(newEl);
+	if (front == nullptr)
+	{
+		front = back = newElem;
+		return;
+	}
+	back->nextPtr = newElem;
+	back = newElem;
 }
 
 template<typename T>
 inline bool LinkedList<T>::deleteBefore(const Iterator & it, T & elem)
 {
-	return false;
+	if (!it || it == begin())
+	{
+		return false;
+	}
+	Node* destroyer = prev(it);
+	elem = destroyer->data;
+	if (destroyer == begin())
+	{
+		front = front->nextPtr;
+	}
+	else
+	{
+		Node* previous = prev(destroyer);
+		previous->nextPtr = destroyer->nextPtr;
+	}
+	delete destroyer;
+	return true;
 }
 
 template<typename T>
 inline bool LinkedList<T>::deleteAt(const Iterator & it, T & elem)
 {
-	return false;
+	if (!it)
+	{
+		return false;
+	}
+	if (it == begin())
+	{
+		elem = front->data;
+		Node* destroyer = it.ptr;
+		if (front == back)
+		{
+			back = nullptr;
+		}
+		front = front->nextPtr;
+		delete destroyer;
+		return true;
+	}
+	return deleteAfter(prev(it), elem);
 }
 
 template<typename T>
 inline bool LinkedList<T>::deleteAfter(const Iterator & it, T & elem)
 {
-	return false;
+	if (!it || it.ptr->nextPtr == nullptr)
+	{
+		return false;
+	}
+	Node* destroyer = it.ptr->nextPtr;
+	elem = destroyer->data;
+	if (destroyer == back)
+	{
+		back = it.ptr;
+	}
+	it.ptr->nextPtr = destroyer->nextPtr;
+	delete destroyer;
+	return true;
 }
 
 template<typename T>
 inline bool LinkedList<T>::deleteBegin(T & elem)
 {
-	return false;
+	if (front == nullptr)
+	{
+		return false;
+	}
+	Node* destroyer = front;
+	elem = front->data;
+	if (front == back)
+	{
+		back = nullptr;
+		front = nullptr;
+		delete destroyer;
+		return true;
+	}
+	front = front->nextPtr;
+	delete destroyer;
+	return true;
 }
 
 template<typename T>
 inline bool LinkedList<T>::deleteEnd(T & elem)
 {
-	return false;
+	if (back == nullptr)
+	{
+		return false;
+	}
+	elem = back->data;
+	if (front == back)
+	{
+		delete back;
+		front = back = nullptr;
+		return true;
+	}
+	Iterator destroyer = prev(Iterator(back));
+	back = destroyer.ptr;
+	delete destroyer.ptr->nextPtr;
+	back->nextPtr = nullptr;
+	return true;
 }
 
 template<typename T>
 inline const T & LinkedList<T>::getAt(const Iterator & it) const
 {
-	// TODO: insert return statement here
+	return it.getConst();
 }
 
 template<typename T>
 inline T & LinkedList<T>::getAt(const Iterator & it)
 {
-	// TODO: insert return statement here
+	return it.get();
 }
 
 template<typename T>
 inline void LinkedList<T>::append(const LinkedList<T>& list)
 {
+	Iterator iter(list.front);
+	while (iter)
+	{
+		insertEnd(iter.getConst());
+		++iter;
+	}
 }
 
 template<typename T>
 inline void LinkedList<T>::print() const
 {
+	Iterator iter(front);
+	while (iter)
+	{
+		std::cout << iter.getConst() << " ";
+		++iter;
+	}
+	std::cout << std::endl;
 }
 
 template<typename T>
 inline int LinkedList<T>::size() const
 {
-	return 0;
+	int count = 0;
+	Iterator iter(front);
+	while (iter)
+	{
+		++count;
+		++iter;
+	}
+	return count;
 }
