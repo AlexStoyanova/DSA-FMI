@@ -23,6 +23,10 @@ private:
 private:
 	void copyFrom(const Company& other);
 	void clear();
+	
+	bool isLeaf(Node* elem);
+	void addLeaf(Node* start, Node* newEmp, std::string name);
+	void removeLeaf(Node* start, std::string name);
 
 public:
 	Node* boss;
