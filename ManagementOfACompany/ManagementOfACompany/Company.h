@@ -27,6 +27,10 @@ private:
 	bool isLeaf(Node* elem);
 	void addLeaf(Node* start, Node* newEmp, std::string name);
 	void removeLeaf(Node* start, std::string name);
+	int maxHeightFromEmployee(Node* start);
+	int maxHeightForEmployeeSubord(std::vector<Node*> subord);
+	int maxElemHelp(std::vector<int> arr);
+	void removeVertex(Node* start, std::string name);
 
 public:
 	Node* boss;
@@ -40,7 +44,7 @@ public:
 	void appointmentWithSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss);
 	void firingEmployeeWithoutSubordinates(std::string nameOfAnEmployee);
 	void firingEmployeeWithSubordinates(std::string nameOfAnEmployee);
-	void risingEmployee(std::string nameOfAnEmployee);
+	void risingEmployee(Node* employeeForHiring, std::vector<Node*> subord);
 
 	std::vector<Employee> directSubordinatesOf(std::string nameOfAnEmployee);
 	std::vector<Employee> allSubordinatesOf(std::string nameOfAnEmployee);
