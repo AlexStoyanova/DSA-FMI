@@ -113,12 +113,64 @@ void Company::removeVertex(Node * start, std::string name)
 			}
 			start->subordinates.erase(start->subordinates.begin() + i);
 		}
-		else
+		else  // if(!isLeaf(start->subordinates[i]))
 		{
 			removeVertex(start->subordinates[i], name);
 		}
 	}
 }
+
+
+void Company::transferOfSubord(Node * newEmp, std::vector<std::string> subord)
+{
+	int size = subord.size();
+	Node* empl;
+	for (int i = 0; i < size; ++i)
+	{
+		if (isEmployeeInCompany(boss, subord[i]))
+		{
+			Employee em(subord[i]);
+			empl = new Node(em);
+			newEmp->subordinates.push_back(empl);
+		}
+	}
+}
+
+
+
+bool Company::isEmployeeInCompany(Node * start, std::string name)
+{
+	int size = start->subordinates.size();                       //bez da proverqvam za imeto na boss
+	for (int i = 0; i < size; ++i)
+	{
+		if (start->subordinates[i]->empl.name == name)
+		{
+			if (isLeaf(start->subordinates[i]))
+			{
+				start->subordinates.erase(start->subordinates.begin() + i);
+			}
+			else
+			{
+				int sizeSub = start->subordinates[i]->subordinates.size();
+				for (int j = 0; j < sizeSub; ++j)
+				{
+					start->subordinates.push_back(start->subordinates[i]->subordinates[j]);
+				}
+				start->subordinates.erase(start->subordinates.begin() + i);
+			}
+			return true;
+		}
+		else if (!isLeaf(start->subordinates[i]))
+		{
+			if (isEmployeeInCompany(start->subordinates[i], name))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 
 
 Company::Company(std::string nameOfABoss)
@@ -159,9 +211,19 @@ void Company::appointmentWithoutSubordinates(std::string nameOfANewMember, std::
 	addLeaf(boss, newNode, nameOfHisBoss);
 }
 
-void Company::appointmentWithSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss)
+void Company::appointmentWithSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss, std::vector<std::string> subord)
 {
-
+	Employee newEm(nameOfANewMember);
+	Node* newNode = new Node(newEm);
+	if (nameOfHisBoss == boss->empl.name)
+	{
+		boss->subordinates.push_back(newNode);
+	}
+	else
+	{
+		addLeaf(boss, newNode, nameOfHisBoss);
+	}
+	transferOfSubord(newNode, subord);
 }
 
 void Company::firingEmployeeWithoutSubordinates(std::string nameOfAnEmployee)
@@ -180,7 +242,7 @@ void Company::firingEmployeeWithSubordinates(std::string nameOfAnEmployee)
 	}
 }
 
-void Company::risingEmployee(Node* employeeForHiring, std::vector<Node*> subord)
+void Company::hiringEmployee(std::string nameOfAnEmployee, std::vector<std::string> subord)
 {
 	
 }

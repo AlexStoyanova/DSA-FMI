@@ -31,6 +31,8 @@ private:
 	int maxHeightForEmployeeSubord(std::vector<Node*> subord);
 	int maxElemHelp(std::vector<int> arr);
 	void removeVertex(Node* start, std::string name);
+	void transferOfSubord(Node* newEmp, std::vector<std::string> subord);
+	bool isEmployeeInCompany(Node* start, std::string name);
 
 public:
 	Node* boss;
@@ -41,10 +43,10 @@ public:
 	~Company();
 
 	void appointmentWithoutSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss);
-	void appointmentWithSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss);
+	void appointmentWithSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss, std::vector<std::string> subord);
 	void firingEmployeeWithoutSubordinates(std::string nameOfAnEmployee);
 	void firingEmployeeWithSubordinates(std::string nameOfAnEmployee);
-	void risingEmployee(Node* employeeForHiring, std::vector<Node*> subord);
+	void hiringEmployee(std::string nameOfAnEmployee, std::vector<std::string> subord);
 
 	std::vector<Employee> directSubordinatesOf(std::string nameOfAnEmployee);
 	std::vector<Employee> allSubordinatesOf(std::string nameOfAnEmployee);

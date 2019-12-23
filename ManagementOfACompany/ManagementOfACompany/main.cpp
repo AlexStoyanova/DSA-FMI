@@ -14,10 +14,12 @@ void test()
 	c.appointmentWithoutSubordinates("Greta", "Nia");
 	c.appointmentWithoutSubordinates("Stefan", "Nia");
 	c.appointmentWithoutSubordinates("Maria", "Gosho");
-	c.appointmentWithoutSubordinates("Silvia", "Alexandra");
+	c.appointmentWithoutSubordinates("Silvia", "Gosho");
 	//c.firingEmployeeWithoutSubordinates("Alexandra");
 	
-	c.firingEmployeeWithSubordinates("Ivan");
+	//c.firingEmployeeWithSubordinates("Ivan");
+	std::vector<std::string> subord = { "Gosho", "Greta", "Lada" };
+	c.appointmentWithSubordinates("Vania", "Tanya", subord);
 }
 
 int main()
