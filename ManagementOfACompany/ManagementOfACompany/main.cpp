@@ -17,16 +17,23 @@ void test()
 	c.appointmentWithoutSubordinates("Silvia", "Gosho");
 	//c.firingEmployeeWithoutSubordinates("Alexandra");
 	
-	c.firingEmployeeWithSubordinates("Ivan");
-	std::vector<std::string> subord = { "Gosho", "Greta", "Lada" };
+	//c.firingEmployeeWithSubordinates("Ivan");
+	//std::vector<std::string> subord = { "Gosho", "Greta", "Lada" };
 	//c.appointmentWithSubordinates("Vania", "Tanya", subord);
-	c.hiringEmployee("Nia", subord);
+	//c.hiringEmployee("Nia", subord);
+
+	//std::vector<std::string> subords = c.allSubordinatesOf("Gosho");
+	//std::vector<std::string> subords = c.directSubordinatesOf("Nia");
+	/*for (int i = 0; i < subords.size(); ++i)
+	{
+		std::cout << subords[i] << std::endl;
+	}*/
+	std::cout << c.directBoss("Ivan");
 }
 
 int main()
 {
 	test();
-
 
 	return 0;
 }

@@ -231,6 +231,90 @@ void Company::findBossOfTheBoss(Node * start, Node*& bossOfTheBoss, std::string 
 	}
 }
 
+std::vector<std::string> Company::directSubExceptBoss(Node * start, std::string name)
+{
+	int size = start->subordinates.size();
+	std::vector<std::string> directSub;
+	for (int i = 0; i < size; ++i)
+	{
+		if (start->subordinates[i]->empl.name == name)
+		{
+			int sizeSub = start->subordinates[i]->subordinates.size();
+			for (int j = 0; j < sizeSub; ++j)
+			{
+				directSub.push_back(start->subordinates[i]->subordinates[j]->empl.name);
+			}
+			return directSub;
+		}
+		else if (!isLeaf(start->subordinates[i]))
+		{
+			directSub = directSubExceptBoss(start->subordinates[i], name);
+			if (!directSub.empty())
+			{
+				return directSub;
+			}
+		}
+	}
+	return directSub;
+}
+
+std::vector<std::string> Company::allSub(Node * empl)
+{
+	std::vector<std::string> all = directSubordinatesOf(empl->empl.name);
+	int size = empl->subordinates.size();
+	std::vector<std::string> newV;
+	for (int i = 0; i < size; ++i)
+	{
+		if (!isLeaf(empl->subordinates[i]))
+		{
+			newV = allSub(empl->subordinates[i]);
+			all.insert(all.end(), newV.begin(), newV.end());
+		}
+	}
+	return all;
+}
+
+void Company::findEmployee(Node * start, Node*& empl, std::string name)
+{
+	if (start->empl.name == name)
+	{
+		empl = start;
+		return;
+	}
+	int size = start->subordinates.size();
+	for (int i = 0; i < size; ++i)
+	{
+		if (start->subordinates[i]->empl.name == name)
+		{
+			empl = start->subordinates[i];
+			return;
+		}
+		findEmployee(start->subordinates[i], empl, name);
+	}
+}
+
+std::string Company::findDirBoss(Node* start, std::string name)
+{
+	int size = start->subordinates.size();
+	std::string bossOfEmpl;
+	for (int i = 0; i < size; ++i)
+	{
+		if (start->subordinates[i]->empl.name == name)
+		{
+			return start->empl.name;
+		}
+		else if (!isLeaf(start->subordinates[i]))
+		{
+			bossOfEmpl = findDirBoss(start->subordinates[i], name);
+			if (!bossOfEmpl.empty())
+			{
+				return bossOfEmpl;
+			}
+		}	
+	}
+	return bossOfEmpl;
+}
+
 Company::Company(std::string nameOfABoss)
 {
 	Employee b(nameOfABoss);
@@ -307,3 +391,39 @@ void Company::hiringEmployee(std::string nameOfAnEmployee, std::vector<std::stri
 		hireEmployee(boss, nameOfAnEmployee, subord);
 	}
 }
+
+std::vector<std::string> Company::directSubordinatesOf(std::string nameOfAnEmployee)
+{
+	std::vector<std::string> directSub;
+	if (nameOfAnEmployee == boss->empl.name)
+	{
+		int size = boss->subordinates.size();
+		for (int i = 0; i < size; ++i)
+		{
+			directSub.push_back(boss->subordinates[i]->empl.name);
+		}
+	}
+	else
+	{
+		directSub = directSubExceptBoss(boss, nameOfAnEmployee);
+	}
+	return directSub;
+}
+
+std::vector<std::string> Company::allSubordinatesOf(std::string nameOfAnEmployee)
+{
+	Node* empl;
+	findEmployee(boss, empl, nameOfAnEmployee);
+	return allSub(empl);
+}
+
+std::string Company::directBoss(std::string nameOfAnEmployee)
+{
+	if (nameOfAnEmployee == boss->empl.name)
+	{
+		return boss->empl.name;
+	}
+	return findDirBoss(boss, nameOfAnEmployee);
+}
+
+
