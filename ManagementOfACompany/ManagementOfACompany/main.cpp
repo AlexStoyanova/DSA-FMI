@@ -17,9 +17,10 @@ void test()
 	c.appointmentWithoutSubordinates("Silvia", "Gosho");
 	//c.firingEmployeeWithoutSubordinates("Alexandra");
 	
-	//c.firingEmployeeWithSubordinates("Ivan");
+	c.firingEmployeeWithSubordinates("Ivan");
 	std::vector<std::string> subord = { "Gosho", "Greta", "Lada" };
-	c.appointmentWithSubordinates("Vania", "Tanya", subord);
+	//c.appointmentWithSubordinates("Vania", "Tanya", subord);
+	c.hiringEmployee("Nia", subord);
 }
 
 int main()

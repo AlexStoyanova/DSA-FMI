@@ -113,7 +113,7 @@ void Company::removeVertex(Node * start, std::string name)
 			}
 			start->subordinates.erase(start->subordinates.begin() + i);
 		}
-		else  // if(!isLeaf(start->subordinates[i]))
+		else if(!isLeaf(start->subordinates[i]))
 		{
 			removeVertex(start->subordinates[i], name);
 		}
@@ -171,7 +171,65 @@ bool Company::isEmployeeInCompany(Node * start, std::string name)
 	return false;
 }
 
+bool Company::isEmployeeDifferentFromFirstLevel(std::string name)
+{
+	int size = boss->subordinates.size();
+	for (int i = 0; i < size; ++i)
+	{
+		if (name == boss->subordinates[i]->empl.name)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
+void Company::hireEmployee(Node* start, std::string name, std::vector<std::string> subord)
+{
+	int size = start->subordinates.size();
+	bool hasThisEmployee = false;
+	Node* hiredEmpl = new Node(Employee(name));
+	for (int i = 0; i < size; ++i)
+	{
+		if (start->subordinates[i]->empl.name == name)
+		{
+			Node* bossOfTheBoss;
+			findBossOfTheBoss(boss, bossOfTheBoss, start->empl.name);
+			int sizeSub = start->subordinates[i]->subordinates.size();
+			for (int j = 0; j < sizeSub; ++j)
+			{
+				start->subordinates.push_back(start->subordinates[i]->subordinates[j]);
+			}
+			bossOfTheBoss->subordinates.push_back(hiredEmpl);
+			start->subordinates.erase(start->subordinates.begin() + i);
+			hasThisEmployee = true;
+		}
+		else if(!isLeaf(start->subordinates[i]))
+		{
+			hireEmployee(start->subordinates[i], name, subord);
+		}
+	}
+	if (hasThisEmployee)
+	{
+		transferOfSubord(hiredEmpl, subord);
+		return;
+	}
+	delete hiredEmpl;
+}
+
+void Company::findBossOfTheBoss(Node * start, Node*& bossOfTheBoss, std::string name)
+{
+	int size = start->subordinates.size();
+	for (int i = 0; i < size; ++i)
+	{
+		if (start->subordinates[i]->empl.name == name)
+		{
+			bossOfTheBoss = start;
+			return;
+		}
+		findBossOfTheBoss(start->subordinates[i], bossOfTheBoss, name);
+	}
+}
 
 Company::Company(std::string nameOfABoss)
 {
@@ -244,5 +302,8 @@ void Company::firingEmployeeWithSubordinates(std::string nameOfAnEmployee)
 
 void Company::hiringEmployee(std::string nameOfAnEmployee, std::vector<std::string> subord)
 {
-	
+	if (nameOfAnEmployee != boss->empl.name && isEmployeeDifferentFromFirstLevel(nameOfAnEmployee))
+	{
+		hireEmployee(boss, nameOfAnEmployee, subord);
+	}
 }

@@ -33,6 +33,9 @@ private:
 	void removeVertex(Node* start, std::string name);
 	void transferOfSubord(Node* newEmp, std::vector<std::string> subord);
 	bool isEmployeeInCompany(Node* start, std::string name);
+	bool isEmployeeDifferentFromFirstLevel(std::string name);
+	void hireEmployee(Node* start, std::string name, std::vector<std::string> subord);
+	void findBossOfTheBoss(Node* start, Node*& bossOfTheBoss, std::string name);
 
 public:
 	Node* boss;
