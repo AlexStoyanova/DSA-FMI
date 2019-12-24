@@ -1,12 +1,31 @@
 #include "Company.h"
 
-
 void Company::copyFrom(const Company & other)
 {
+
 }
 
 void Company::clear()
 {
+    clearHelp(boss);
+	delete boss;
+}
+
+void Company::clearHelp(Node* start)
+{
+	int size = start->subordinates.size();
+	for (int i = 0; i < size; ++i)
+	{
+		if (isLeaf(start->subordinates[i]))
+		{
+			delete start->subordinates[i];
+		}
+		else
+		{
+			clearHelp(start->subordinates[i]);
+			delete start->subordinates[i];
+		}
+	}
 }
 
 bool Company::isLeaf(Node * elem)
@@ -38,6 +57,7 @@ void Company::removeLeaf(Node* start, std::string name)
 	{
 		if (isLeaf(start->subordinates[i]) && start->subordinates[i]->empl.name == name)
 		{
+			delete start->subordinates[i];
 			start->subordinates.erase(start->subordinates.begin() + i);
 			return;
 		}
@@ -111,6 +131,7 @@ void Company::removeVertex(Node * start, std::string name)
 					employeeForHiring->subordinates.push_back(start->subordinates[i]->subordinates[j]);
 				}				
 			}
+			delete start->subordinates[i];
 			start->subordinates.erase(start->subordinates.begin() + i);
 		}
 		else if(!isLeaf(start->subordinates[i]))
@@ -147,6 +168,7 @@ bool Company::isEmployeeInCompany(Node * start, std::string name)
 		{
 			if (isLeaf(start->subordinates[i]))
 			{
+				delete start->subordinates[i];
 				start->subordinates.erase(start->subordinates.begin() + i);
 			}
 			else
@@ -156,6 +178,7 @@ bool Company::isEmployeeInCompany(Node * start, std::string name)
 				{
 					start->subordinates.push_back(start->subordinates[i]->subordinates[j]);
 				}
+				delete start->subordinates[i];
 				start->subordinates.erase(start->subordinates.begin() + i);
 			}
 			return true;
@@ -201,6 +224,7 @@ void Company::hireEmployee(Node* start, std::string name, std::vector<std::strin
 				start->subordinates.push_back(start->subordinates[i]->subordinates[j]);
 			}
 			bossOfTheBoss->subordinates.push_back(hiredEmpl);
+			delete start->subordinates[i];
 			start->subordinates.erase(start->subordinates.begin() + i);
 			hasThisEmployee = true;
 		}

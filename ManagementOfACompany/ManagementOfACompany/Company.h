@@ -22,6 +22,7 @@ private:
 
 private:
 	void copyFrom(const Company& other);
+	void clearHelp(Node* start);
 	void clear();
 	
 	bool isLeaf(Node* elem);
