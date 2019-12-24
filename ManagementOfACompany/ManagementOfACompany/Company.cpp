@@ -2,7 +2,22 @@
 
 void Company::copyFrom(const Company & other)
 {
+	boss = nullptr;
+	boss = new Node(other.boss->empl.name);
+	copyHelp(boss, other.boss);
+}
 
+void Company::copyHelp(Node* ours, Node * theirs)
+{
+	int size = theirs->subordinates.size();
+	for (int i = 0; i < size; ++i)
+	{
+		appointmentWithoutSubordinates(theirs->subordinates[i]->empl.name, ours->empl.name);
+		if (!isLeaf(theirs->subordinates[i]))
+		{
+			copyHelp(ours->subordinates[i], theirs->subordinates[i]);
+		}
+	}
 }
 
 void Company::clear()

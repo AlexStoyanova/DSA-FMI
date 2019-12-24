@@ -22,23 +22,31 @@ private:
 
 private:
 	void copyFrom(const Company& other);
+	void copyHelp(Node* ours, Node* theirs);
 	void clearHelp(Node* start);
 	void clear();
 	
 	bool isLeaf(Node* elem);
 	void addLeaf(Node* start, Node* newEmp, std::string name);
 	void removeLeaf(Node* start, std::string name);
+
 	int maxHeightFromEmployee(Node* start);
 	int maxHeightForEmployeeSubord(std::vector<Node*> subord);
 	int maxElemHelp(std::vector<int> arr);
+
 	void removeVertex(Node* start, std::string name);
+
 	void transferOfSubord(Node* newEmp, std::vector<std::string> subord);
+
 	bool isEmployeeInCompany(Node* start, std::string name);
 	bool isEmployeeDifferentFromFirstLevel(std::string name);
+
 	void hireEmployee(Node* start, std::string name, std::vector<std::string> subord);
 	void findBossOfTheBoss(Node* start, Node*& bossOfTheBoss, std::string name);
+
 	std::vector<std::string> directSubExceptBoss(Node* start, std::string name);
 	std::vector<std::string> allSub(Node* empl);
+
 	void findEmployee(Node* start, Node*& empl, std::string name);
 	std::string findDirBoss(Node* start, std::string name);
 
