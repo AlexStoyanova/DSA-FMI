@@ -12,12 +12,19 @@ void Company::copyHelp(Node* ours, Node * theirs)
 	int size = theirs->subordinates.size();
 	for (int i = 0; i < size; ++i)
 	{
-		appointmentWithoutSubordinates(theirs->subordinates[i]->empl.name, ours->empl.name);
+		//appointmentWithoutSubordinates(theirs->subordinates[i]->empl.name, ours->empl.name);
+		addLeafConstant(ours, theirs->subordinates[i]->empl.name);
 		if (!isLeaf(theirs->subordinates[i]))
 		{
 			copyHelp(ours->subordinates[i], theirs->subordinates[i]);
 		}
 	}
+}
+
+void Company::addLeafConstant(Node * ours, const std::string newEmpl)
+{
+	Node* newNode = new Node(Employee(newEmpl));
+	ours->subordinates.push_back(newNode);
 }
 
 void Company::clear()
@@ -43,12 +50,12 @@ void Company::clearHelp(Node* start)
 	}
 }
 
-bool Company::isLeaf(Node * elem)
+bool Company::isLeaf(const Node * elem) const
 {
 	return elem->subordinates.empty();
 }
 
-void Company::addLeaf(Node* start, Node * newEmp, std::string name)
+void Company::addLeaf(Node* start, Node * newEmp, const std::string name)
 {
 	int size = start->subordinates.size();
 	for (int i = 0; i < size; ++i)
@@ -65,7 +72,7 @@ void Company::addLeaf(Node* start, Node * newEmp, std::string name)
 	}
 }
 
-void Company::removeLeaf(Node* start, std::string name)
+void Company::removeLeaf(Node* start, const std::string name)
 {
 	int size = start->subordinates.size();
 	for (int i = 0; i < size; ++i)
@@ -84,12 +91,12 @@ void Company::removeLeaf(Node* start, std::string name)
 }
 
 
-int Company::maxHeightFromEmployee(Node* start)
+int Company::maxHeightFromEmployee(Node* start) const
 {
 	return 1 + maxHeightForEmployeeSubord(start->subordinates);
 }
 
-int Company::maxHeightForEmployeeSubord(std::vector<Node*> subord)
+int Company::maxHeightForEmployeeSubord(const std::vector<Node*>& subord) const
 {
 	if (subord.empty())
 	{
@@ -104,7 +111,7 @@ int Company::maxHeightForEmployeeSubord(std::vector<Node*> subord)
 	return maxElemHelp(heights);
 }
 
-int Company::maxElemHelp(std::vector<int> arr)
+int Company::maxElemHelp(const std::vector<int>& arr) const
 {
 	int size = arr.size();
 	int max = arr[0];
@@ -118,7 +125,7 @@ int Company::maxElemHelp(std::vector<int> arr)
 	return max;
 }
 
-void Company::removeVertex(Node * start, std::string name)
+void Company::removeVertex(Node * start, const std::string name)
 {
 	int size = start->subordinates.size();
 	int maxHeight = 0;
@@ -157,7 +164,7 @@ void Company::removeVertex(Node * start, std::string name)
 }
 
 
-void Company::transferOfSubord(Node * newEmp, std::vector<std::string> subord)
+void Company::transferOfSubord(Node * newEmp, const std::vector<std::string> subord)
 {
 	int size = subord.size();
 	Node* empl;
@@ -174,7 +181,7 @@ void Company::transferOfSubord(Node * newEmp, std::vector<std::string> subord)
 
 
 
-bool Company::isEmployeeInCompany(Node * start, std::string name)
+bool Company::isEmployeeInCompany(Node * start, const std::string name)
 {
 	int size = start->subordinates.size();                       //bez da proverqvam za imeto na boss
 	for (int i = 0; i < size; ++i)
@@ -209,7 +216,7 @@ bool Company::isEmployeeInCompany(Node * start, std::string name)
 	return false;
 }
 
-bool Company::isEmployeeDifferentFromFirstLevel(std::string name)
+bool Company::isEmployeeDifferentFromFirstLevel(const std::string name) const
 {
 	int size = boss->subordinates.size();
 	for (int i = 0; i < size; ++i)
@@ -222,7 +229,7 @@ bool Company::isEmployeeDifferentFromFirstLevel(std::string name)
 	return true;
 }
 
-void Company::hireEmployee(Node* start, std::string name, std::vector<std::string> subord)
+void Company::hireEmployee(Node* start, const std::string name, const std::vector<std::string> subord)
 {
 	int size = start->subordinates.size();
 	bool hasThisEmployee = false;
@@ -256,7 +263,7 @@ void Company::hireEmployee(Node* start, std::string name, std::vector<std::strin
 	delete hiredEmpl;
 }
 
-void Company::findBossOfTheBoss(Node * start, Node*& bossOfTheBoss, std::string name)
+void Company::findBossOfTheBoss(Node * start, Node*& bossOfTheBoss, const std::string name) const
 {
 	int size = start->subordinates.size();
 	for (int i = 0; i < size; ++i)
@@ -270,7 +277,7 @@ void Company::findBossOfTheBoss(Node * start, Node*& bossOfTheBoss, std::string 
 	}
 }
 
-std::vector<std::string> Company::directSubExceptBoss(Node * start, std::string name)
+std::vector<std::string> Company::directSubExceptBoss(Node * start, const std::string name) const
 {
 	int size = start->subordinates.size();
 	std::vector<std::string> directSub;
@@ -297,7 +304,7 @@ std::vector<std::string> Company::directSubExceptBoss(Node * start, std::string 
 	return directSub;
 }
 
-std::vector<std::string> Company::allSub(Node * empl)
+std::vector<std::string> Company::allSub(Node * empl) const
 {
 	std::vector<std::string> all = directSubordinatesOf(empl->empl.name);
 	int size = empl->subordinates.size();
@@ -313,7 +320,7 @@ std::vector<std::string> Company::allSub(Node * empl)
 	return all;
 }
 
-void Company::findEmployee(Node * start, Node*& empl, std::string name)
+void Company::findEmployee(Node * start, Node*& empl, const std::string name) const
 {
 	if (start->empl.name == name)
 	{
@@ -332,7 +339,7 @@ void Company::findEmployee(Node * start, Node*& empl, std::string name)
 	}
 }
 
-std::string Company::findDirBoss(Node* start, std::string name)
+std::string Company::findDirBoss(Node* start, const std::string name) const
 {
 	int size = start->subordinates.size();
 	std::string bossOfEmpl;
@@ -354,7 +361,7 @@ std::string Company::findDirBoss(Node* start, std::string name)
 	return bossOfEmpl;
 }
 
-Company::Company(std::string nameOfABoss)
+Company::Company(const std::string nameOfABoss)
 {
 	Employee b(nameOfABoss);
 	boss = new Node(b);
@@ -380,7 +387,7 @@ Company::~Company()
 	clear();
 }
 
-void Company::appointmentWithoutSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss)
+void Company::appointmentWithoutSubordinates(const std::string nameOfANewMember, const std::string nameOfHisBoss)
 {
 	Employee newEm(nameOfANewMember);
 	Node* newNode = new Node(newEm);
@@ -392,7 +399,7 @@ void Company::appointmentWithoutSubordinates(std::string nameOfANewMember, std::
 	addLeaf(boss, newNode, nameOfHisBoss);
 }
 
-void Company::appointmentWithSubordinates(std::string nameOfANewMember, std::string nameOfHisBoss, std::vector<std::string> subord)
+void Company::appointmentWithSubordinates(const std::string nameOfANewMember, const std::string nameOfHisBoss, const std::vector<std::string> subord)
 {
 	Employee newEm(nameOfANewMember);
 	Node* newNode = new Node(newEm);
@@ -407,7 +414,7 @@ void Company::appointmentWithSubordinates(std::string nameOfANewMember, std::str
 	transferOfSubord(newNode, subord);
 }
 
-void Company::firingEmployeeWithoutSubordinates(std::string nameOfAnEmployee)
+void Company::firingEmployeeWithoutSubordinates(const std::string nameOfAnEmployee)
 {
 	if (nameOfAnEmployee != boss->empl.name)
 	{
@@ -415,7 +422,7 @@ void Company::firingEmployeeWithoutSubordinates(std::string nameOfAnEmployee)
 	}	
 }
 
-void Company::firingEmployeeWithSubordinates(std::string nameOfAnEmployee)
+void Company::firingEmployeeWithSubordinates(const std::string nameOfAnEmployee)
 {
 	if (nameOfAnEmployee != boss->empl.name)
 	{
@@ -423,7 +430,7 @@ void Company::firingEmployeeWithSubordinates(std::string nameOfAnEmployee)
 	}
 }
 
-void Company::hiringEmployee(std::string nameOfAnEmployee, std::vector<std::string> subord)
+void Company::hiringEmployee(const std::string nameOfAnEmployee, const std::vector<std::string> subord)
 {
 	if (nameOfAnEmployee != boss->empl.name && isEmployeeDifferentFromFirstLevel(nameOfAnEmployee))
 	{
@@ -431,7 +438,7 @@ void Company::hiringEmployee(std::string nameOfAnEmployee, std::vector<std::stri
 	}
 }
 
-std::vector<std::string> Company::directSubordinatesOf(std::string nameOfAnEmployee)
+std::vector<std::string> Company::directSubordinatesOf(const std::string nameOfAnEmployee) const
 {
 	std::vector<std::string> directSub;
 	if (nameOfAnEmployee == boss->empl.name)
@@ -449,14 +456,14 @@ std::vector<std::string> Company::directSubordinatesOf(std::string nameOfAnEmplo
 	return directSub;
 }
 
-std::vector<std::string> Company::allSubordinatesOf(std::string nameOfAnEmployee)
+std::vector<std::string> Company::allSubordinatesOf(std::string nameOfAnEmployee) const 
 {
 	Node* empl;
 	findEmployee(boss, empl, nameOfAnEmployee);
 	return allSub(empl);
 }
 
-std::string Company::directBoss(std::string nameOfAnEmployee)
+std::string Company::directBoss(std::string nameOfAnEmployee) const
 {
 	if (nameOfAnEmployee == boss->empl.name)
 	{

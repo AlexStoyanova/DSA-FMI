@@ -18,9 +18,9 @@ void test()
 	//c.firingEmployeeWithoutSubordinates("Maria");
 	
 	//c.firingEmployeeWithSubordinates("Ivan");
-	//std::vector<std::string> subord = { "Gosho", "Greta", "Lada" };
+	std::vector<std::string> subord = { "Gosho", "Greta", "Lada" };
 	//c.appointmentWithSubordinates("Vania", "Tanya", subord);
-	//c.hiringEmployee("Nia", subord);
+	c.hiringEmployee("Nia", subord);
 
 	//std::vector<std::string> subords = c.allSubordinatesOf("Gosho");
 	//std::vector<std::string> subords = c.directSubordinatesOf("Nia");
