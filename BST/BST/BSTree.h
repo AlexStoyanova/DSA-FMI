@@ -25,10 +25,11 @@ private:
 	void copyFrom(const BSTree<T>& other);
 	void copyHelper(Node*& ours, Node* theirs);
 	void deleteTree(Node*& start);
-	void add(Node* start, const T& newElem);
-	void remove(Node* start, const T& elem);
+	void add(Node*& start, const T& newElem);
+	void remove(Node*& start, const T& elem);
 	BSTree<T> findAndTake(Node* start, const T& elem);
 	unsigned int getHeightHelper(Node* start) const;
+	void printHelper(Node* start) const;
 
 public:
 	BSTree();
@@ -40,6 +41,7 @@ public:
 	void removeElement(const T& elem);
 	BSTree<T> findElemAndTakeSubtree(const T& elem);
 	unsigned int getHeight() const;
+	void print() const;
 };
 
 template<typename T>
@@ -59,7 +61,7 @@ void BSTree<T>::copyHelper(typename BSTree<T>::Node *& ours,
 	}
 	ours = new Node(theirs->data);
 	copyHelper(ours->leftTree, theirs->leftTree);
-	copyHelper(theirs->rightTree, theirs->rightTree);
+	copyHelper(ours->rightTree, theirs->rightTree);
 }
 
 template<typename T>
@@ -74,7 +76,7 @@ void BSTree<T>::deleteTree(typename BSTree<T>::Node *& start)
 }
 
 template<typename T>
-void BSTree<T>::add(typename BSTree<T>::Node * start, const T & newElem)
+void BSTree<T>::add(typename BSTree<T>::Node *& start, const T & newElem)
 {
 	if (start == nullptr)
 	{
@@ -98,7 +100,7 @@ void BSTree<T>::add(typename BSTree<T>::Node * start, const T & newElem)
 }
 
 template<typename T>
-void BSTree<T>::remove(typename BSTree<T>::Node * start, const T & elem)
+void BSTree<T>::remove(typename BSTree<T>::Node *& start, const T & elem)
 {
 	if (start == nullptr)
 	{
@@ -169,13 +171,24 @@ BSTree<T> BSTree<T>::findAndTake(typename BSTree<T>::Node * start, const T & ele
 }
 
 template<typename T>
-inline unsigned int BSTree<T>::getHeightHelper(Node * start) const
+inline unsigned int BSTree<T>::getHeightHelper(typename BSTree<T>::Node * start) const
 {
 	if (start == nullptr)
 	{
 		return 0;
 	}
 	return 1 + std::max(getHeightHelper(start->leftTree), getHeightHelper(start->rightTree));
+}
+
+template<typename T>
+void BSTree<T>::printHelper(typename BSTree<T>::Node * start) const
+{
+	if(start)
+	{
+		printHelper(start->leftTree);
+		std::cout << start->data << " ";
+		printHelper(start->rightTree);
+	}
 }
 
 template<typename T>
@@ -229,4 +242,10 @@ template<typename T>
 unsigned int BSTree<T>::getHeight() const
 {
 	return getHeightHelper(root);
+}
+
+template<typename T>
+void BSTree<T>::print() const
+{
+	printHelper(root);
 }
